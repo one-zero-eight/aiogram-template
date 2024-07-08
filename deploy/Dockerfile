@@ -39,7 +39,7 @@ RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=${POETRY_HOME} pyt
 # and install only runtime deps using poetry
 WORKDIR $PYSETUP_PATH
 COPY ./poetry.lock ./pyproject.toml ./
-RUN poetry install --only main,prod
+RUN poetry install --only main
 
 
 ###########################################################
@@ -55,10 +55,9 @@ RUN chmod +x /docker-entrypoint.sh
 RUN groupadd -g 1500 poetry && \
     useradd -m -u 1500 -g poetry poetry
 
-COPY --chown=poetry:poetry ./src /code/src
+COPY --chown=poetry:poetry . /code
 USER poetry
 WORKDIR /code
 
-EXPOSE 8000
 ENTRYPOINT /docker-entrypoint.sh $0 $@
-CMD [ "gunicorn", "--worker-class uvicorn.workers.UvicornWorker", "--bind 0.0.0.0:8000", "--workers 1", "src.api.app:app" ]
+CMD [ "python3", "-m", "src.bot" ]

@@ -22,15 +22,3 @@ loggers:
     handlers:
       - src
     propagate: no
-  uvicorn.error:
-    level: INFO
-    handlers:
-      - default
-    propagate: no
-  uvicorn.access:
-    level: INFO
-    handlers:
-      - default
-    propagate: no
-  passlib:
-    level: ERROR

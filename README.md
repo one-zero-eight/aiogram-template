@@ -1,4 +1,4 @@
-# FastAPI Template
+# Aiogram Template
 
 ## Table of contents
 
@@ -7,14 +7,12 @@ contents [by default](https://github.blog/changelog/2021-04-13-table-of-contents
 
 ## About
 
-This is the FastAPI ASGI application.
+This is the Telegram Bot.
 
 ### Technologies
 
 - [Python 3.11](https://www.python.org/downloads/release/python-3117/) & [Poetry](https://python-poetry.org/docs/)
-- [FastAPI](https://fastapi.tiangolo.com/) & [Pydantic](https://docs.pydantic.dev/latest/)
-- Database and ORM: [PostgreSQL](https://www.postgresql.org/), [SQLAlchemy](https://www.sqlalchemy.org/),
-  [Alembic](https://alembic.sqlalchemy.org/en/latest/)
+- [Aiogram 3](https://docs.aiogram.dev/en/latest/) & [aiogram-dialog](https://aiogram-dialog.readthedocs.io/)
 - Formatting and linting: [Ruff](https://docs.astral.sh/ruff/), [pre-commit](https://pre-commit.com/)
 - Deployment: [Docker](https://www.docker.com/), [Docker Compose](https://docs.docker.com/compose/),
   [GitHub Actions](https://github.com/features/actions)
@@ -39,37 +37,6 @@ This is the FastAPI ASGI application.
    cp settings.example.yaml settings.yaml
    ```
    Edit `settings.yaml` according to your needs.
-6. Set up a [PostgreSQL](https://www.postgresql.org/) database instance.
-   <details>
-    <summary>Using docker container</summary>
-
-    - Set up database settings for [docker-compose](https://docs.docker.com/compose/) container
-      in `.env` file:х
-      ```bash
-      cp .example.env .env
-      ```
-    - Run the database instance:
-      ```bash
-      docker compose up -d db
-      ```
-    - Make sure to set up the actual database connection in `settings.yaml`, for example:
-      ```yaml
-      database:
-        uri: postgresql+asyncpg://postgres:postgres@localhost:5432/postgres
-      ```
-
-   </details>
-   <details>
-    <summary>Using pgAdmin</summary>
-
-    - Connect to the PostgreSQL server using pgAdmin
-    - Set up a new database in the server: `Edit > New Object > New database`
-    - Use the database name in `settings.yaml` file, for example `db_name`:
-      ```yaml
-      database:
-        uri: postgresql+asyncpg://postgres:your_password@localhost:5432/db_name
-      ```
-   </details>
 
 **Set up PyCharm integrations**
 
@@ -83,34 +50,26 @@ This is the FastAPI ASGI application.
 ### Run for development
 
 1. Run the database if you have not done it yet
-2. Upgrade the database schema using [alembic](https://alembic.sqlalchemy.org/en/latest/):
+2. Run the Redis server if needed:
    ```bash
-   poetry run alembic upgrade head
+   docker compose up -d redis
    ```
-3. Run the ASGI server
+3. Run the bot:
    ```bash
-   poetry run python -m src.api
+   poetry run python -m src.bot
    ```
-   OR using uvicorn directly
-   ```bash
-   poetry run uvicorn src.api.app:app --use-colors --proxy-headers --forwarded-allow-ips=*
-   ```
-
-Now the API is running on http://localhost:8000. Good job!
 
 ### Deployment
 
 We use Docker with Docker Compose plugin to run the service on servers.
 
-1. Copy the file with environment variables: `cp .example.env .env`
-2. Change environment variables in the `.env` file
-3. Copy the file with settings: `cp settings.example.yaml settings.yaml`
-4. Change settings in the `settings.yaml` file according to your needs
+1. Copy the file with settings: `cp settings.example.yaml settings.yaml`
+2. Change settings in the `settings.yaml` file according to your needs
    (check [settings.schema.yaml](settings.schema.yaml) for more info)
-5. Install Docker with Docker Compose
-6. Build a Docker image: `docker compose build --pull`
-7. Run the container: `docker compose up --detach`
-8. Check the logs: `docker compose logs -f`
+3. Install Docker with Docker Compose
+4. Build a Docker image: `docker compose build --pull`
+5. Run the container: `docker compose up --detach`
+6. Check the logs: `docker compose logs -f`
 
 # How to update dependencies
 

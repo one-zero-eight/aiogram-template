@@ -2,6 +2,7 @@ from enum import StrEnum
 from pathlib import Path
 
 import yaml
+from aiogram.types import BotCommand
 from pydantic import BaseModel, Field, SecretStr, ConfigDict
 
 
@@ -14,34 +15,6 @@ class SettingBaseModel(BaseModel):
     model_config = ConfigDict(use_attribute_docstrings=True, extra="forbid")
 
 
-class Cookies(SettingBaseModel):
-    # Authentication
-    name: str = "token"
-    domain: str = "innohassle.ru"
-    allowed_domains: list[str] = ["innohassle.ru", "api.innohassle.ru", "localhost"]
-
-
-class StaticFiles(SettingBaseModel):
-    mount_path: str = "/static"
-    mount_name: str = "static"
-    directory: Path = Path("static")
-
-
-class Database(SettingBaseModel):
-    """PostgreSQL database settings."""
-
-    uri: SecretStr = Field(..., examples=["postgresql+asyncpg://postgres:postgres@localhost:5432/postgres"])
-
-
-class Predefined(SettingBaseModel):
-    """Predefined settings. Will be used in setup stage."""
-
-    first_superuser_login: str = "admin"
-    "Login for the first superuser"
-    first_superuser_password: str = "admin"
-    "Password for the first superuser"
-
-
 class Settings(SettingBaseModel):
     """
     Settings for the application.
@@ -50,26 +23,20 @@ class Settings(SettingBaseModel):
     schema_: str = Field(None, alias="$schema")
     environment: Environment = Environment.DEVELOPMENT
     "App environment flag"
-    app_root_path: str = ""
-    'Prefix for the API path (e.g. "/api/v0")'
-    database: Database
-    "PostgreSQL database settings"
-    predefined: Predefined = Predefined()
-    "Predefined settings"
-    session_secret_key: SecretStr
-    "Secret key for sessions middleware. Use 'openssl " "rand -hex 32' to generate keys"
-    jwt_private_key: SecretStr
-    "Private key for JWT. Use 'openssl genrsa -out private.pem 2048' to generate keys"
-    jwt_public_key: str
-    "Public key for JWT. Use 'openssl rsa -in private.pem -pubout -out public.pem' to generate keys"
-    # Static files
-    static_files: StaticFiles | None = None
-    "Static files settings"
-    cors_allow_origins: list[str] = ["https://innohassle.ru", "http://localhost:3000"]
-    "CORS origins, used by FastAPI CORSMiddleware"
-    # Authentication
-    cookie: Cookies | None = Cookies()
-    "Cookies settings"
+    redis_url: SecretStr | None = Field(None, examples=["redis://localhost:6379/0"])
+    "Redis URL"
+    bot_token: SecretStr
+    "Telegram bot token from @BotFather"
+    bot_name: str = None
+    "Desired bot name"
+    bot_description: str = None
+    "Bot description"
+    bot_short_description: str = None
+    "Bot short description"
+    bot_commands: list[BotCommand] = None
+    "Bot commands (displayed in telegram menu)"
+    admins: list[int] = []
+    "Admin' telegram IDs"
 
     @classmethod
     def from_yaml(cls, path: Path) -> "Settings":
