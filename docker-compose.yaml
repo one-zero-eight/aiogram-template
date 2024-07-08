@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  api:
+    depends_on:
+      db:
+        condition: service_healthy
+    build:
+      dockerfile: ./deploy/Dockerfile
+      context: .
+    restart: always
+    ports:
+      - "8000:8000"
+    env_file: .env
+
+  db:
+    # See more: https://registry.hub.docker.com/_/mongo
+    image: "mongo:7.0"
+    restart: always
+    volumes:
+      - "mongodb:/data/db"
+    ports:
+      - "27017:27017"
+    env_file: .env # Set username and password in .env file
+
+volumes:
+  mongodb:
