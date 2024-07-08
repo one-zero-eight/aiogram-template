@@ -10,6 +10,7 @@ services:
     restart: always
 
   redis:
+    # See more: https://hub.docker.com/_/redis
     build: ./redis # See ./redis/Dockerfile for more details
     restart: always
     volumes:
