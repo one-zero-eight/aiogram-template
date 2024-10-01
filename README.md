@@ -11,7 +11,7 @@ This is the Telegram Bot.
 
 ### Technologies
 
-- [Python 3.11](https://www.python.org/downloads/release/python-3117/) & [Poetry](https://python-poetry.org/docs/)
+- [Python 3.12](https://www.python.org/downloads/) & [Poetry](https://python-poetry.org/docs/)
 - [Aiogram 3](https://docs.aiogram.dev/en/latest/) & [aiogram-dialog](https://aiogram-dialog.readthedocs.io/)
 - Formatting and linting: [Ruff](https://docs.astral.sh/ruff/), [pre-commit](https://pre-commit.com/)
 - Deployment: [Docker](https://www.docker.com/), [Docker Compose](https://docs.docker.com/compose/),
@@ -21,11 +21,11 @@ This is the Telegram Bot.
 
 ### Getting started
 
-1. Install [Python 3.11+](https://www.python.org/downloads/release/python-3117/)
+1. Install [Python 3.12](https://www.python.org/downloads/)
 2. Install [Poetry](https://python-poetry.org/docs/)
 3. Install project dependencies with [Poetry](https://python-poetry.org/docs/cli/#options-2).
    ```bash
-   poetry install --no-root --with dev
+   poetry install
    ```
 4. Set up [pre-commit](https://pre-commit.com/) hooks:
 

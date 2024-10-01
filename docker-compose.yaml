@@ -1,20 +1,20 @@
 services:
   bot:
-    build:
-      dockerfile: ./deploy/Dockerfile
-      context: .
+    build: .
     volumes:
       - "./settings.yaml:/code/settings.yaml:ro" # Read-only settings file
     depends_on:
-      - redis # Wait for the database to be ready before starting the application
+      - redis
     restart: always
 
   redis:
     # See more: https://hub.docker.com/_/redis
-    build: ./redis # See ./redis/Dockerfile for more details
+    image: "redis:7.4.0-alpine"
     restart: always
+    command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
     volumes:
       - "redis:/data"
+      - "./redis/:/usr/local/etc/redis/"
     ports:
       - "6379:6379"
 

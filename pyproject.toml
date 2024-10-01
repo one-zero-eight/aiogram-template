@@ -4,27 +4,18 @@ version = "0.1.0"
 description = ""
 authors = ["one-zero-eight <https://t.me/one_zero_eight>"]
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
-python = "^3.11"
-pydantic = "^2.8.2"
+python = "^3.12"
+aiogram = "^3.13.1"
+aiogram-dialog = "^2.2.0"
 colorlog = "^6.8.2"
-aiogram = "^3.10.0"
-aiogram-dialog = "^2.1.0"
-redis = "^5.0.7"
-pyyaml = "^6.0.1"
-
-[tool.poetry.group.dev]
-optional = true
-[tool.poetry.group.dev.dependencies]
-ruff = "^0.5.1"
-pre-commit = "^3.7.1"
-
-[tool.poetry.group.ci]
-optional = true
-[tool.poetry.group.ci.dependencies]
-pydantic = "^2.8.2"
-pre-commit = "^3.7.1"
+pre-commit = "^3.8.0"
+pydantic = "^2.9.2"
+pyyaml = "^6.0.2"
+redis = "^5.1.0"
+ruff = "^0.6.8"
 
 [tool.ruff]
 line-length = 120
