@@ -1,10 +1,12 @@
 from aiogram import Bot, F, types
+from aiogram.dispatcher.event.bases import SkipHandler
 from aiogram.filters import ExceptionTypeFilter
+from aiogram.fsm.context import FSMContext
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.fsm.storage.redis import DefaultKeyBuilder, RedisStorage
 from aiogram.types import ErrorEvent
-from aiogram_dialog import setup_dialogs
-from aiogram_dialog.api.exceptions import UnknownIntent
+from aiogram_dialog import DialogManager, setup_dialogs
+from aiogram_dialog.api.exceptions import UnknownIntent, UnknownState
 
 from src.bot.dispatcher import CustomDispatcher
 from src.bot.logging_ import logger
@@ -33,6 +35,14 @@ dp.callback_query.middleware(log_all_events_middleware)
 @dp.error(ExceptionTypeFilter(UnknownIntent), F.update.callback_query.as_("callback_query"))
 async def unknown_intent_handler(event: ErrorEvent, callback_query: types.CallbackQuery):
     await callback_query.answer("Unknown intent: Please, try to restart the action.")
+
+
+@dp.error(ExceptionTypeFilter(UnknownState))
+async def on_unknown_state(event: ErrorEvent, state: FSMContext, dialog_manager: DialogManager):
+    logger.warning("Messed up dialog: %s", event.exception)
+    await state.clear()
+    await dialog_manager.reset_stack()
+    raise SkipHandler()
 
 
 from src.bot.routers.commands import router as commands_router  # noqa: E402
