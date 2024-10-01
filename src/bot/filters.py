@@ -30,3 +30,6 @@ class StatusFilter(Filter):
         if status == self._status:
             return True
         return False
+
+
+USER_REGISTERED_FILTER = UserRegisteredFilter()

@@ -51,11 +51,17 @@ class LogAllEventsMiddleware(BaseMiddleware):
         lineno = inspect.getsourcelines(callback)[1]
 
         event_type = type(event).__name__
-        username = event.from_user.username
-        user_string = f"User @{username}<{event.from_user.id}>" if username else f"User <{event.from_user.id}>"
+        if hasattr(event, "from_user"):
+            username = event.from_user.username
+            user_string = f"User @{username}<{event.from_user.id}>" if username else f"User <{event.from_user.id}>"
+        else:
+            user_string = "User <unknown>"
 
         if isinstance(event, Message):
-            message_text = f"{event.text[:50]}..." if len(event.text) > 50 else event.text
+            if event.text is not None:
+                message_text = f"{event.text[:50]}..." if len(event.text) > 50 else event.text
+            else:
+                message_text = "no-text"
             msg = f"{user_string}: [{event_type}] `{message_text}`"
         elif isinstance(event, CallbackQuery):
             msg = f"{user_string}: [{event_type}] `{event.data}`"

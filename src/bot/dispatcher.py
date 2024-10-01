@@ -26,7 +26,10 @@ class CustomDispatcher(Dispatcher):
             event_type = type(event).__name__
 
             if isinstance(event, Message):
-                message_text = f"{event.text[:50]}..." if len(event.text) > 50 else event.text
+                if event.text is not None:
+                    message_text = f"{event.text[:50]}..." if len(event.text) > 50 else event.text
+                else:
+                    message_text = "no-text"
                 msg = f"{user_string}: [{event_type}] `{message_text}`"
             elif isinstance(event, CallbackQuery):
                 msg = f"{user_string}: [{event_type}] `{event.data}`"

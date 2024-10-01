@@ -11,6 +11,9 @@ from src.bot.logging_ import logger
 from src.bot.middlewares import LogAllEventsMiddleware
 from src.bot.utils import check_commands_equality
 from src.config import settings
+from time import perf_counter
+
+_time1 = perf_counter()
 
 bot = Bot(token=settings.bot_token.get_secret_value())
 if settings.redis_url:
@@ -32,13 +35,15 @@ async def unknown_intent_handler(event: ErrorEvent, callback_query: types.Callba
     await callback_query.answer("Unknown intent: Please, try to restart the action.")
 
 
-from src.bot.routers.registration import router as router_registration  # noqa: E402
-from src.bot.routers.start_help_menu import router as start_help_menu_router  # noqa: E402
-from src.bot.routers.admin import router as router_admin  # noqa: E402
+from src.bot.routers.commands import router as commands_router  # noqa: E402
+from src.bot.routers.registration import router as registration_router  # noqa: E402
+from src.bot.routers.admin import router as admin_router  # noqa: E402
+from src.bot.routers.user import router as user_router  # noqa: E402
 
-dp.include_router(router_registration)  # sink for not registered users
-dp.include_router(start_help_menu_router)  # start, help, menu commands
-dp.include_router(router_admin)  # admin commands
+dp.include_router(commands_router)  # start, help, menu commands
+dp.include_router(registration_router)  # sink for not registered users
+dp.include_router(admin_router)  # admin mode
+dp.include_router(user_router)  # user model
 
 setup_dialogs(dp)
 
@@ -53,6 +58,7 @@ async def on_startup():
         "description": (await bot.get_my_description()).description,
         "shortDescription": (await bot.get_my_short_description()).short_description,
         "commands": await bot.get_my_commands(scope=scope),
+        "username": (await bot.me()).username,
     }
     if settings.bot_name and existing_bot["name"] != settings.bot_name:
         _ = await bot.set_my_name(settings.bot_name)
@@ -64,8 +70,10 @@ async def on_startup():
         _ = await bot.set_my_short_description(settings.bot_short_description)
         logger.info(f"Bot short description updated. Succes: {_}")
     if settings.bot_commands and not check_commands_equality(existing_bot["commands"], settings.bot_commands):
+        logger.info(f"Was: {existing_bot['commands']}; New: {settings.bot_commands}")
         _ = await bot.set_my_commands(settings.bot_commands, scope=scope)
         logger.info(f"Bot commands updated. Success: {_}.")
+    logger.info(f"Bot started https://t.me/{existing_bot['username']} in {perf_counter() - _time1:.2f} sec.")
 
 
 @dp.shutdown()
