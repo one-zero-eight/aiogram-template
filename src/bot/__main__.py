@@ -1,9 +1,11 @@
 import asyncio
 import os
-from pathlib import Path
 
-# Change dir to project root (three levels up from this file)
-os.chdir(Path(__file__).parents[2])
+from src.prepare import BASE_DIR, prepare
+
+os.chdir(BASE_DIR)
+
+prepare()
 
 from src.bot.app import main  # noqa: E402
 

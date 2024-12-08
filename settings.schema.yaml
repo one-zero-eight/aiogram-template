@@ -45,6 +45,7 @@ properties:
     description: Redis URL
     examples:
     - redis://localhost:6379/0
+    - redis://redis:6379/0
     title: Redis Url
   bot_token:
     description: Telegram bot token from @BotFather

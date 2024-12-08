@@ -1,6 +1,6 @@
 $schema: "./settings.schema.yaml"
 # ---------- Application settings ----- #
-bot_token: "123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11" # Telegram bot token from @BotFather
+bot_token: null # Telegram bot token from @BotFather
 bot_name: "My Telegram Bot"
 bot_commands:
   - command: "start"
@@ -9,4 +9,4 @@ bot_commands:
     description: "Get help"
   - command: "menu"
     description: "Show the menu"
-redis_url: "redis://localhost:6379/0" # Redis URL, "redis://redis:6379/0" inside the docker network
+redis_url: null # Redis URL, "redis://redis:6379/0" inside the docker network

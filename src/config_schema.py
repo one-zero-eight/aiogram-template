@@ -23,7 +23,7 @@ class Settings(SettingBaseModel):
     schema_: str = Field(None, alias="$schema")
     environment: Environment = Environment.DEVELOPMENT
     "App environment flag"
-    redis_url: SecretStr | None = Field(None, examples=["redis://localhost:6379/0"])
+    redis_url: SecretStr | None = Field(None, examples=["redis://localhost:6379/0", "redis://redis:6379/0"])
     "Redis URL"
     bot_token: SecretStr
     "Telegram bot token from @BotFather"
