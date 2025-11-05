@@ -5,7 +5,7 @@
 !/src/
 !/deploy/
 !/pyproject.toml
-!/poetry.lock
+!/uv.lock
 !logging.yaml
 
 # And ignore cache files in the code
