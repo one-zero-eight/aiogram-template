@@ -11,7 +11,7 @@ This is the Telegram Bot.
 
 ### Technologies
 
-- [Python 3.12](https://www.python.org/downloads/) & [Poetry](https://python-poetry.org/docs/)
+- [Python 3.13](https://www.python.org/downloads/) & [UV](https://docs.astral.sh/uv)
 - [Aiogram 3](https://docs.aiogram.dev/en/latest/) & [aiogram-dialog](https://aiogram-dialog.readthedocs.io/)
 - Formatting and linting: [Ruff](https://docs.astral.sh/ruff/), [pre-commit](https://pre-commit.com/)
 - Deployment: [Docker](https://www.docker.com/), [Docker Compose](https://docs.docker.com/compose/),
@@ -20,15 +20,15 @@ This is the Telegram Bot.
 ## Development
 
 ### Getting started
-1. Install [Python 3.12+](https://www.python.org/downloads/), [Poetry](https://python-poetry.org/docs/),
+1. Install [Python 3.13+](https://www.python.org/downloads/), [UV](https://docs.astral.sh/uv/getting-started/installation/),
    [Docker](https://docs.docker.com/engine/install/)
-2. Install project dependencies with [Poetry](https://python-poetry.org/docs/cli/#install).
+2. Install project dependencies with [UV](https://docs.astral.sh/uv/concepts/projects/sync/#syncing-the-environment).
    ```bash
-   poetry install
+   uv sync
    ```
 3. Start development server:
    ```bash
-   poetry run python -m src.bot
+   uv run python -m src.bot
    ```
    > Follow provided instructions if needed
 
@@ -63,12 +63,12 @@ We use Docker with Docker Compose plugin to run the service on servers.
 
 ## Project dependencies
 
-1. Run `poetry update` to update all dependencies
-2. Run `poetry show --outdated` to check for outdated dependencies
-3. Run `poetry add <package>@latest` to add a new dependency if needed
+1. Run `uv lock --upgrade` to update all dependencies
+2. Run `uv pip list --outdated` to check for outdated dependencies
+3. Run `uv add <package>@latest` to add a new dependency if needed
 
 ## Pre-commit hooks
 
-1. Run `poetry run pre-commit autoupdate`
+1. Run `uv run pre-commit autoupdate`
 
 Also, Dependabot will help you to keep your dependencies up-to-date, see [dependabot.yml](.github/dependabot.yml).

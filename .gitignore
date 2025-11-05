@@ -8,3 +8,4 @@ __pycache__
 ### Environment ###
 .env
 settings.yaml
+.python-version
