@@ -1,3 +1,5 @@
+from time import perf_counter
+
 from aiogram import Bot, F, types
 from aiogram.dispatcher.event.bases import SkipHandler
 from aiogram.filters import ExceptionTypeFilter
@@ -13,7 +15,6 @@ from src.bot.logging_ import logger
 from src.bot.middlewares import LogAllEventsMiddleware
 from src.bot.utils import check_commands_equality
 from src.config import settings
-from time import perf_counter
 
 _time1 = perf_counter()
 
@@ -45,9 +46,9 @@ async def on_unknown_state(event: ErrorEvent, state: FSMContext, dialog_manager:
     raise SkipHandler()
 
 
+from src.bot.routers.admin import router as admin_router  # noqa: E402
 from src.bot.routers.commands import router as commands_router  # noqa: E402
 from src.bot.routers.registration import router as registration_router  # noqa: E402
-from src.bot.routers.admin import router as admin_router  # noqa: E402
 from src.bot.routers.user import router as user_router  # noqa: E402
 
 dp.include_router(commands_router)  # start, help, menu commands

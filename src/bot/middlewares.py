@@ -2,11 +2,12 @@ import asyncio
 import inspect
 import logging
 import os
-from typing import Callable, Dict, Any, Awaitable, Optional
+from collections.abc import Awaitable, Callable
+from typing import Any
 
 from aiogram import BaseMiddleware
 from aiogram.dispatcher.event.handler import HandlerObject
-from aiogram.types import TelegramObject, Message, CallbackQuery
+from aiogram.types import CallbackQuery, Message, TelegramObject
 
 from src.bot.logging_ import logger
 
@@ -15,9 +16,9 @@ from src.bot.logging_ import logger
 class LogAllEventsMiddleware(BaseMiddleware):
     async def __call__(
         self,
-        handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],
+        handler: Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]],
         event: TelegramObject,
-        data: Dict[str, Any],
+        data: dict[str, Any],
     ) -> Any:
         loop = asyncio.get_running_loop()
         start_time = loop.time()
@@ -43,7 +44,7 @@ class LogAllEventsMiddleware(BaseMiddleware):
         return r
 
     def _create_log_record(
-        self, handler: HandlerObject, event: TelegramObject, data: Dict[str, Any], *, duration: Optional[float] = None
+        self, handler: HandlerObject, event: TelegramObject, data: dict[str, Any], *, duration: float | None = None
     ) -> logging.LogRecord:
         callback = handler.callback
         func_name = callback.__name__

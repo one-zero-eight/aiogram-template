@@ -1,8 +1,8 @@
 from typing import Any
 
-from aiogram import Dispatcher, Bot
+from aiogram import Bot, Dispatcher
 from aiogram.dispatcher.event.bases import UNHANDLED
-from aiogram.types import Update, User, Message, CallbackQuery
+from aiogram.types import CallbackQuery, Message, Update, User
 
 from src.bot.logging_ import logger
 

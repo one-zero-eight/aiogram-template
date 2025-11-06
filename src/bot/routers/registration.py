@@ -1,10 +1,9 @@
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import CallbackQuery, KeyboardButton, Message, ReplyKeyboardMarkup
-
 from aiogram_dialog import Dialog, StartMode, Window
-from aiogram_dialog.widgets.text import Const
-from aiogram_dialog.widgets.input import ManagedTextInput, MessageInput, TextInput
 from aiogram_dialog.manager.manager import DialogManager
+from aiogram_dialog.widgets.input import ManagedTextInput, MessageInput, TextInput
+from aiogram_dialog.widgets.text import Const
 
 from src.bot.filters import USER_REGISTERED_FILTER
 from src.bot.routers.user import UserStates
@@ -47,7 +46,7 @@ async def phone_on_message(
     widget: MessageInput,
     dialog_manager: DialogManager,
 ) -> None:
-    from src.bot.app import dp, bot
+    from src.bot.app import bot, dp
 
     if message.contact is None or (message.contact.user_id != message.from_user.id):
         await message.answer("Please, send your phone number.")
