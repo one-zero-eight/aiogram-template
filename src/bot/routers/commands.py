@@ -1,10 +1,9 @@
-from aiogram import Bot, Router
-from aiogram import types
-from aiogram.filters import CommandStart, Command
+from aiogram import Bot, Router, types
+from aiogram.filters import Command, CommandStart
 from aiogram.types import BotCommandScopeChat
 from aiogram_dialog import DialogManager, StartMode
 
-from src.bot.filters import StatusFilter, USER_REGISTERED_FILTER
+from src.bot.filters import USER_REGISTERED_FILTER, StatusFilter
 from src.bot.routers.admin import AdminStates
 from src.bot.routers.registration import RegisterStates
 from src.bot.routers.user import UserStates
