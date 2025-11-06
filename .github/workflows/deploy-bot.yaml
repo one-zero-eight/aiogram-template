@@ -1,0 +1,90 @@
+name: BOT. Build and deploy
+
+on:
+  # Allow manual trigger of the workflow
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment to deploy to
+        type: environment
+        required: true
+  # Verify build on any push (but only deploy on main)
+  push:
+  # Verify build in pull requests
+  pull_request:
+
+env:
+  # Use GitHub Container Registry
+  REGISTRY: ghcr.io
+  IMAGE_NAME: one-zero-eight/aiogram-template
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    permissions: # Permissions granted to the 'GITHUB_TOKEN'
+      contents: read
+      packages: write
+      pull-requests: write
+      security-events: write
+
+    outputs:
+      imageid: ${{ steps.build.outputs.imageid }}
+    steps:
+      - name: 👾 Checkout repository
+        uses: actions/checkout@v5
+
+      - name: 🐳 Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: 🐳 Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🐳 Extract metadata for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: 🐳 Build and push Docker image
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: bot.Dockerfile
+          push: ${{ github.repository_owner == 'one-zero-eight' && 'true' || 'false' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    # Only on manual trigger or push to main
+    if: github.repository_owner == 'one-zero-eight' && (github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main'))
+    name: ⚡️ Deploy to server for ${{ github.event.inputs.environment || 'staging' }}
+    needs: build-and-push-image
+    runs-on: [self-hosted, innohassle]
+    environment:
+      # Set the environment name and URL to be displayed in GitHub
+      name: ${{ github.event.inputs.environment || 'staging' }}
+      url: ${{ vars.DEPLOY_URL_BOT }}
+    concurrency:
+      # Set the concurrency group to prevent multiple deployments at once
+      group: ${{ github.event.inputs.environment || 'staging' }}
+      cancel-in-progress: false
+    steps:
+      - name: ⚡️ Deploy via SSH
+        uses: appleboy/ssh-action@v1.1.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          fingerprint: ${{ secrets.SSH_FINGERPRINT }}
+          script_stop: true # Stop script on error
+          command_timeout: 30m
+          script: |
+            cd "${{ secrets.DEPLOY_DIRECTORY }}"
+            bash "${{ secrets.DEPLOY_SCRIPT_BOT }}" "${{ needs.build-and-push-image.outputs.imageid }}"
