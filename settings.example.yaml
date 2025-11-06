@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=settings.schema.yaml
 $schema: "./settings.schema.yaml"
 # ---------- Application settings ----- #
 bot_token: null # Telegram bot token from @BotFather
