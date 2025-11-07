@@ -43,8 +43,3 @@ line-length = 120
 target-version = "py313"
 lint.extend-select = ["I", "UP", "PL"]
 lint.extend-ignore = ["PLC0415", "PLR"]
-lint.ignore = [
-    # wildcard imports are fine
-    "F403",
-    "F405",
-]
