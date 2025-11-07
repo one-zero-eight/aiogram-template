@@ -28,7 +28,7 @@ This is the Telegram Bot.
    ```
 3. Start development server:
    ```bash
-   uv run python -m src.bot
+   uv run -m src.bot
    ```
    > Follow provided instructions if needed
 
